@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/actDetailThumb"
+            android:background="@color/colorSecondaryDark"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_star"
+            android:layout_width="120dp"
+            android:layout_height="150dp" />
+
+        <LinearLayout
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/actDetailThumb"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/txtDetailName"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:layout_marginBottom="5dp"
+                android:text="Sko Beats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txtDetailTagline"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/colorSecondaryDark"
+                android:text="Vanila Sky Blue Alchool"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtDetailDescription"
+        android:padding="20dp"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/colorSecondaryDark"
+        android:text="Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
