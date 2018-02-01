@@ -11,8 +11,6 @@
         <ImageView
             android:id="@+id/actDetailThumb"
             android:background="@color/colorSecondaryDark"
-            android:scaleType="fitXY"
-            android:src="@mipmap/icon_star"
             android:layout_width="120dp"
             android:layout_height="150dp" />
 
