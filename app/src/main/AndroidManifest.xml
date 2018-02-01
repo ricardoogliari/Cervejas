@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="rogliari.pessoal.projeto.com.cervejas">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/beer_list"></activity>
+            android:label="@string/beer_list"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.SplashActivity"
             android:label="@string/title_activity_splash"
@@ -24,8 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.BeerDetailActivity"></activity>
+        <activity android:name=".activities.BeerDetailActivity" />
     </application>
 
 </manifest>

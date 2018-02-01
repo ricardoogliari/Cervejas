@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +42,7 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, Callback<Lis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbarDefault)
 
         recMainList.setHasFixedSize(true)
 
@@ -50,10 +54,33 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, Callback<Lis
 
         val call = RetrofitInitializer().beerService().list()
         call.enqueue(this)
+
+        btnBack.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                showInitActionBar()
+            }
+        })
+
+        btnClose.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                showInitActionBar()
+            }
+        })
+    }
+
+    fun showInitActionBar(){
+        toolbarDefault.visibility = View.VISIBLE
+        toolbarSearch.visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        toolbarDefault.visibility = View.GONE
+        toolbarSearch.visibility = View.VISIBLE
         return true
     }
 }

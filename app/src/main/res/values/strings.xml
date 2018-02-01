@@ -3,4 +3,6 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="beer_list">Beer List</string>
     <string name="title_activity_beer_detail">BeerDetailActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="type_your_search_here">Digite sua busca aqui</string>
 </resources>
