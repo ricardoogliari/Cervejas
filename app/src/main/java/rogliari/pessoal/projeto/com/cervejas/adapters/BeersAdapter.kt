@@ -16,13 +16,18 @@ import rogliari.pessoal.projeto.com.cervejas.models.Beer
  * Created by ricardoogliari on 1/31/18.
  */
 class BeersAdapter(
-        private val beers: List<Beer>,
+        private var beers: List<Beer>,
         private val context: Context,
         private val listener: ClickInBeerListInterface): Adapter<BeersAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var name = itemView.txtItemBeerName
         var tagline = itemView.txtItemBeerTagline
+    }
+
+    fun newSetOfData(newBeers : List<Beer>){
+        beers = newBeers
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
