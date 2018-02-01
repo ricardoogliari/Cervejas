@@ -12,7 +12,7 @@ import rogliari.pessoal.projeto.com.cervejas.models.Beer
 
 class BeerDetailActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {git git
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_beer_detail)
 
