@@ -11,34 +11,58 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import org.reactivestreams.Subscriber
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import rogliari.pessoal.projeto.com.cervejas.R
 import rogliari.pessoal.projeto.com.cervejas.adapters.BeersAdapter
 import rogliari.pessoal.projeto.com.cervejas.listeners.ClickInBeerListInterface
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
 import rogliari.pessoal.projeto.com.cervejas.retrofit.RetrofitInitializer
 
-class MainActivity : AppCompatActivity(), ClickInBeerListInterface {
+class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClickListener, SwipyRefreshLayout.OnRefreshListener {
 
     lateinit var beers : List<Beer>
     lateinit var choresFlowable : Flowable<List<Beer>>
     lateinit var mAdapter : BeersAdapter
+    var page : Int = 1;
+
+    override fun onRefresh(direction: SwipyRefreshLayoutDirection?) {
+        page++
+        getBeers()
+    }
+
+    override fun onClick(view: View?) {
+        showInitActionBar()
+    }
 
     override fun click(beer: Beer) {
         val intent = Intent(this, BeerDetailActivity::class.java)
         intent.putExtra("beer", beer)
         startActivity(intent)
+    }
+
+    private fun getBeers(){
+        choresFlowable = RetrofitInitializer().beerService().list(page) //val makes reference final
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        choresFlowable.subscribe { response ->
+            if (page == 1) {
+                beers = response.toList()
+                mAdapter = BeersAdapter(beers, this, this)
+                recMainList.adapter = mAdapter
+            } else {
+                beers = beers.plus(response.toList())
+                mAdapter.newSetOfData(beers)
+            }
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,33 +71,18 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface {
         setSupportActionBar(toolbarDefault)
 
         recMainList.setHasFixedSize(true)
-
         recMainList.layoutManager = LinearLayoutManager(this)
 
         val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         itemDecoration.setDrawable(resources.getDrawable(R.drawable.divider))
         recMainList.addItemDecoration(itemDecoration)
 
-        choresFlowable = RetrofitInitializer().beerService().list() //val makes reference final
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-        choresFlowable.subscribe { response ->
-            beers = response.toList()
-            mAdapter = BeersAdapter(beers, this, this)
-            recMainList.adapter = mAdapter
-        }
+        swipeRefreshLayout.setOnRefreshListener(this);
 
-        btnBack.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                showInitActionBar()
-            }
-        })
+        getBeers();
 
-        btnClose.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                showInitActionBar()
-            }
-        })
+        btnBack.setOnClickListener(this)
+        btnClose.setOnClickListener(this)
 
         Observable.create(ObservableOnSubscribe<String> { subscriber ->
             edtSearch.addTextChangedListener(object : TextWatcher {

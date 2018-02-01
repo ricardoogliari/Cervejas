@@ -2,7 +2,9 @@ package rogliari.pessoal.projeto.com.cervejas.retrofit
 
 import io.reactivex.Flowable
 import retrofit2.Call
+import retrofit2.http.Field
 import retrofit2.http.GET
+import retrofit2.http.Query
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
 
 /**
@@ -10,7 +12,7 @@ import rogliari.pessoal.projeto.com.cervejas.models.Beer
  */
 interface BeerService {
 
-    @GET("beers?page1&per_page=10")
-    fun list() : Flowable<List<Beer>>
+    @GET("beers?per_page=10")
+    fun list(@Query("page") page : Int) : Flowable<List<Beer>>
 
 }
