@@ -10,7 +10,7 @@ import rogliari.pessoal.projeto.com.cervejas.models.Beer
  */
 interface BeerService {
 
-    @GET("beers?brewed_before=11-2012&abv_gt=6")
+    @GET("beers?page1&per_page=10")
     fun list() : Flowable<List<Beer>>
 
 }

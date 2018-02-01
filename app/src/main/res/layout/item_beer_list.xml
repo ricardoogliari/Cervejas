@@ -14,8 +14,8 @@
         android:id="@+id/imgItemBeerThumb"
         android:src="@mipmap/icon_star"
         android:background="@color/colorSecondaryDark"
-        android:layout_width="60dp"
-        android:layout_height="60dp" />
+        android:layout_width="70dp"
+        android:layout_height="90dp" />
 
     <LinearLayout
         android:padding="10dp"
