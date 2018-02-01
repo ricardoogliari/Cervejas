@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_beer_list.view.*
 import rogliari.pessoal.projeto.com.cervejas.R
+import rogliari.pessoal.projeto.com.cervejas.listeners.ClickInBeerListInterface
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
 
 /**
@@ -16,7 +17,8 @@ import rogliari.pessoal.projeto.com.cervejas.models.Beer
  */
 class BeersAdapter(
         private val beers: List<Beer>,
-        private val context: Context): Adapter<BeersAdapter.ViewHolder>() {
+        private val context: Context,
+        private val listener: ClickInBeerListInterface): Adapter<BeersAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var name = itemView.txtItemBeerName
@@ -28,8 +30,15 @@ class BeersAdapter(
         holder?.let {
             it.name.text = beer.name
             it.tagline.text = beer.tagline
+
+            holder.itemView.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    listener.click(beers[position])
+                }
+            })
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_beer_list, parent, false)

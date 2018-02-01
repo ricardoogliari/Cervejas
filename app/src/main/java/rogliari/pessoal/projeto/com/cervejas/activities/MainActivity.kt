@@ -1,5 +1,6 @@
 package rogliari.pessoal.projeto.com.cervejas.activities
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -8,9 +9,16 @@ import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import rogliari.pessoal.projeto.com.cervejas.R
 import rogliari.pessoal.projeto.com.cervejas.adapters.BeersAdapter
+import rogliari.pessoal.projeto.com.cervejas.listeners.ClickInBeerListInterface
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ClickInBeerListInterface {
+
+    override fun click(beer: Beer) {
+        val intent = Intent(this, BeerDetailActivity::class.java)
+        intent.putExtra("beer", beer)
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         beers.add(Beer("Skol", "Jesus, que ruim"))
         beers.add(Beer("Guaipeca", "Melhor cerveja que tomei nos últimos 15 anos, sensacional, recomendo"))
         beers.add(Beer("Braham Extra", "Também tem seu valor, fica entre as duas citadas acima"))
-        val mAdapter = BeersAdapter(beers, this)
+        val mAdapter = BeersAdapter(beers, this, this)
         recMainList.adapter = mAdapter
           //  }
 
