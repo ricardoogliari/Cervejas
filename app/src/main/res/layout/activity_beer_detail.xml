@@ -29,7 +29,6 @@
                 android:textSize="20sp"
                 android:textColor="@color/black"
                 android:layout_marginBottom="5dp"
-                android:text="Sko Beats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -38,7 +37,6 @@
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:textColor="@color/colorSecondaryDark"
-                android:text="Vanila Sky Blue Alchool"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -51,7 +49,6 @@
         android:textStyle="bold"
         android:textSize="15sp"
         android:textColor="@color/colorSecondaryDark"
-        android:text="Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

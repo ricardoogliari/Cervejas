@@ -38,9 +38,9 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface {
 
                 // specify an adapter (see also next example)
         val beers = ArrayList<Beer>()
-        beers.add(Beer("Skol", "Jesus, que ruim"))
-        beers.add(Beer("Guaipeca", "Melhor cerveja que tomei nos últimos 15 anos, sensacional, recomendo"))
-        beers.add(Beer("Braham Extra", "Também tem seu valor, fica entre as duas citadas acima"))
+        beers.add(Beer("Skol", "Jesus, que ruim", "Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."))
+        beers.add(Beer("Guaipeca", "Melhor cerveja que tomei nos últimos 15 anos, sensacional, recomendo", "Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."))
+        beers.add(Beer("Braham Extra", "Também tem seu valor, fica entre as duas citadas acima", "Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."))
         val mAdapter = BeersAdapter(beers, this, this)
         recMainList.adapter = mAdapter
           //  }
