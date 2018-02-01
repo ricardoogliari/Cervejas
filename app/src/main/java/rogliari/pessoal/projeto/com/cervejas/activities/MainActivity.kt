@@ -7,12 +7,28 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import rogliari.pessoal.projeto.com.cervejas.R
 import rogliari.pessoal.projeto.com.cervejas.adapters.BeersAdapter
 import rogliari.pessoal.projeto.com.cervejas.listeners.ClickInBeerListInterface
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
+import rogliari.pessoal.projeto.com.cervejas.retrofit.RetrofitInitializer
 
-class MainActivity : AppCompatActivity(), ClickInBeerListInterface {
+class MainActivity : AppCompatActivity(), ClickInBeerListInterface, Callback<List<Beer>> {
+
+    override fun onFailure(call: Call<List<Beer>>?, t: Throwable?) {
+
+    }
+
+    override fun onResponse(call: Call<List<Beer>>?, response: Response<List<Beer>>?) {
+        response?.body()?.let {
+            val beers : List<Beer> = it
+            val mAdapter = BeersAdapter(beers, this, this)
+            recMainList.adapter = mAdapter
+        }
+    }
 
     override fun click(beer: Beer) {
         val intent = Intent(this, BeerDetailActivity::class.java)
@@ -32,23 +48,8 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface {
         itemDecoration.setDrawable(resources.getDrawable(R.drawable.divider))
         recMainList.addItemDecoration(itemDecoration)
 
-        //RequestService.getRacesByMotorista(this, object : RequestService.CallbackDefault {
-          //  override fun onSuccess(result: JsonObject) {
-            //    val container = Gson().fromJson<ContainerRaces>(result.toString(), ContainerRaces::class.java!!)
-
-                // specify an adapter (see also next example)
-        val beers = ArrayList<Beer>()
-        beers.add(Beer("Skol", "Jesus, que ruim", "Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."))
-        beers.add(Beer("Guaipeca", "Melhor cerveja que tomei nos últimos 15 anos, sensacional, recomendo", "Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."))
-        beers.add(Beer("Braham Extra", "Também tem seu valor, fica entre as duas citadas acima", "Mussum Ipsum, cacilds vidis litro abertis. Diuretics paradis num copo é motivis de denguis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Admodum accumsan disputationi eu sit. Vide electram sadipscing et per."))
-        val mAdapter = BeersAdapter(beers, this, this)
-        recMainList.adapter = mAdapter
-          //  }
-
-       //     override fun onError() {
-
-         //   }
-        //}, auth.data.id)
+        val call = RetrofitInitializer().beerService().list()
+        call.enqueue(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

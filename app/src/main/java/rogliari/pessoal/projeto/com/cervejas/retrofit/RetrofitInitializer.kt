@@ -8,11 +8,12 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class RetrofitInitializer {
 
-    fun init() {
-        val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.punkapi.com/v2/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-    }
+
+    private val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.punkapi.com/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+    fun beerService() = retrofit.create(BeerService::class.java)
 
 }

@@ -7,7 +7,8 @@ import java.io.Serializable
  */
 class Beer (var name: String,
             var tagline: String,
-            var description: String) : Serializable{
+            var description: String,
+            var image_url: String) : Serializable{
 
 
 
