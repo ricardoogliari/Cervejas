@@ -6,13 +6,18 @@ import java.io.Serializable
 
 /**
  * Created by ricardoogliari on 1/31/18.
+ * Modelo de dado da cerveja que seja serializado na chamada HTTP pelo Retrofit
  */
-open class Beer (@PrimaryKey var name: String,
+open class Beer (@PrimaryKey var id: Int,
+                  var name: String,
                   var tagline: String,
                   var description: String,
-                  var image_url: String) : Serializable, RealmObject() {
+                  var image_url: String) : RealmObject() {
 
-    constructor() : this("", "", "", ""){
+    /*
+    Construtor vazio é premissa do Realm API
+    */
+    constructor() : this(0, "", "", "", ""){
 
     }
 

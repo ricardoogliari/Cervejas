@@ -6,10 +6,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Created by ricardoogliari on 1/31/18.
+ * Classe inicializadora do Retrofit
  */
 class RetrofitInitializer {
 
-
+    /*
+    Conversor JSON para a resposta HTTP da requisição
+    Adaptador do RxJava para uso do Flowable
+     */
     private val retrofit = Retrofit.Builder()
             .baseUrl("https://api.punkapi.com/v2/")
             .addConverterFactory(GsonConverterFactory.create())
