@@ -48,20 +48,23 @@ class BeerDetailActivity : AppCompatActivity() {
         val favorite = intent.getBooleanExtra("favorite", false)
 
         miFavorite = menu?.findItem(R.id.miFavorite)
-        miFavorite?.setVisible(if (favorite) true else false)
         miNoFavorite = menu?.findItem(R.id.miNoFavorite)
-        miNoFavorite?.setVisible(if (favorite) false else true)
+
+        holdFavorite(favorite)
 
         return true;
     }
 
+    fun holdFavorite(favorite: Boolean){
+        miFavorite?.setVisible(favorite)
+        miNoFavorite?.setVisible(!favorite)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.miFavorite) {
-            miFavorite?.setVisible(false)
-            miNoFavorite?.setVisible(true)
+            holdFavorite(false)
         } else {
-            miFavorite?.setVisible(true)
-            miNoFavorite?.setVisible(false)
+            holdFavorite(true)
         }
 
         return true;
