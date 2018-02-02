@@ -40,15 +40,29 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
 
     var connected  : Boolean = false
 
+    /*
+    * Método da interface ObRefreshListener.
+    * Incrementa a paginação e faz a busca por novas cervejas (cache ou requisição HTTTP).
+    * */
     override fun onRefresh(direction: SwipyRefreshLayoutDirection?) {
         page++
         getBeers()
     }
 
+    /*
+    * Método da interface View.OnClickListener.
+    * Será chamado no clique dos botões da barra de pesquisa:
+    * Botão voltar a esquerda e fechar a direita.
+    * */
     override fun onClick(view: View?) {
         showInitActionBar()
     }
 
+    /*
+    * Método da interface ClickInBeerListInterface.
+    * Trata do clique em uma das cervejas da listagem
+    * Chama a tela de detalhes passando por extras os dados da mesma.
+    * */
     override fun click(beer: Beer) {
         val intent = Intent(this, BeerDetailActivity::class.java)
         intent.putExtra("name", beer.name)
@@ -58,6 +72,11 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         startActivity(intent)
     }
 
+    /*
+    * O método busca as cervejas.
+    * Se o usuário está conectado faz uma requisição HTTP através do Retrofit e Observable
+    * Caso contrário, usa os dados salvos em cache com o Realm.
+    * */
     private fun getBeers(){
         if (connected) {
 
@@ -123,6 +142,10 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         btnBack.setOnClickListener(this)
         btnClose.setOnClickListener(this)
 
+        /*
+        * Uso do RxKotlin para, através do padrão Observable, identificar a edição do campo de pesquisa e
+        * refletir na listagem das cervejas
+        * */
         Observable.create(ObservableOnSubscribe<String> { subscriber ->
             edtSearch.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) = Unit
@@ -133,7 +156,6 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({
             text ->
-                Log.e("Output", "->>>> " + text)
             if (text.length > 0){
                 var tempList = ArrayList<Beer>()
 
@@ -146,6 +168,11 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         })
     }
 
+    /*
+    * Sobrecarrega o comportamento de pressionamento do botão virtual de Back.
+    * O teste lógico verifica se a toolbar visible é a da pesquisa. Neste caso a Activity não é fechada. Apenas
+    * a toolbar padrão é mostrada novamente.
+    * */
     override fun onBackPressed() {
         if (toolbarSearch.visibility == View.VISIBLE){
             showInitActionBar()
@@ -154,6 +181,12 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         }
     }
 
+    /*
+    * Existem três momentos em que a Toolbar padrão deve ser mostrada: quando o botão de boltar do topo for clicado,
+    * quando o botão de fechar a barra de pesquisa for clicado, quando o botão de voltar na parte inferior da tela for clicada
+    * Em todos os três casos esse método será chado.
+    * O mais importante aqui é que o adapter recebe a listagem original das cervejas para mostrar
+    * */
     fun showInitActionBar(){
         toolbarDefault.visibility = View.VISIBLE
         toolbarSearch.visibility = View.GONE
@@ -166,6 +199,9 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         return true
     }
 
+    /*
+    * Quando o action item da lupa for clicado, altera a toolbar para mostra a caixa de pesquisa
+    * */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         toolbarDefault.visibility = View.GONE
         toolbarSearch.visibility = View.VISIBLE
