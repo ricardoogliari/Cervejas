@@ -12,12 +12,13 @@ open class Beer (@PrimaryKey var id: Int,
                   var name: String,
                   var tagline: String,
                   var description: String,
-                  var image_url: String) : RealmObject() {
+                  var image_url: String,
+                  var favorite: Boolean) : RealmObject() {
 
     /*
     Construtor vazio é premissa do Realm API
     */
-    constructor() : this(0, "", "", "", ""){
+    constructor() : this(0, "", "", "", "", false){
 
     }
 
