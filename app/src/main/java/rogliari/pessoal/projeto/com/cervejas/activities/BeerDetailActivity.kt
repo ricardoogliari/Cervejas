@@ -2,6 +2,8 @@ package rogliari.pessoal.projeto.com.cervejas.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_beer_detail.*
 import rogliari.pessoal.projeto.com.cervejas.R
 import rogliari.pessoal.projeto.com.cervejas.extensions.load
@@ -12,6 +14,9 @@ import rogliari.pessoal.projeto.com.cervejas.util.Utilitario
 * Tela de detalhe de uma cerveja
 * */
 class BeerDetailActivity : AppCompatActivity() {
+
+    var miFavorite : MenuItem? = null
+    var miNoFavorite : MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,31 @@ class BeerDetailActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail, menu)
+
+        val favorite = intent.getBooleanExtra("favorite", false)
+
+        miFavorite = menu?.findItem(R.id.miFavorite)
+        miFavorite?.setVisible(if (favorite) true else false)
+        miNoFavorite = menu?.findItem(R.id.miNoFavorite)
+        miNoFavorite?.setVisible(if (favorite) false else true)
+
+        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.miFavorite) {
+            miFavorite?.setVisible(false)
+            miNoFavorite?.setVisible(true)
+        } else {
+            miFavorite?.setVisible(true)
+            miNoFavorite?.setVisible(false)
+        }
+
+        return true;
     }
 
 }
