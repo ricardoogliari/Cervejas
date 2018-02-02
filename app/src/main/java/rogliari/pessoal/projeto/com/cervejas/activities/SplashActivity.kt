@@ -9,6 +9,9 @@ import io.realm.Realm
 import rogliari.pessoal.projeto.com.cervejas.R
 import java.util.*
 
+/*
+* Tela de entrada da aplicação. O Handler espera por 1 segundo e meio e chama a tela principal da aplicação. (Lista de cervejas)
+* */
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
