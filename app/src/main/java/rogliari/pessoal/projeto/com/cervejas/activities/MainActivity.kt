@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         itemDecoration.setDrawable(resources.getDrawable(R.drawable.divider))
         recMainList.addItemDecoration(itemDecoration)
 
+        swipeRefreshLayout.isRefreshing = true;
         swipeRefreshLayout.setOnRefreshListener(this);
 
         getBeers();
