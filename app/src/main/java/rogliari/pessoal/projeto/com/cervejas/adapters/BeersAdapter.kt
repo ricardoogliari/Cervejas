@@ -12,6 +12,7 @@ import rogliari.pessoal.projeto.com.cervejas.extensions.load
 import rogliari.pessoal.projeto.com.cervejas.extensions.px
 import rogliari.pessoal.projeto.com.cervejas.listeners.ClickInBeerListInterface
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
+import rogliari.pessoal.projeto.com.cervejas.util.Utilitario
 
 /**
  * Created by ricardoogliari on 1/31/18.
@@ -37,7 +38,12 @@ class BeersAdapter(
         holder?.let {
             it.name.text = beer.name
             it.tagline.text = beer.tagline
-            it.photo.load(beer.image_url) { request -> request.resize(70.px, 90.px).centerInside() }
+
+            if (Utilitario.isConnected(context)) {
+                it.photo.load(beer.image_url) { request -> request.resize(70.px, 90.px).centerInside() }
+            } else {
+                it.photo.setImageResource(R.drawable.ic_wifi_off)
+            }
 
             holder.itemView.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {

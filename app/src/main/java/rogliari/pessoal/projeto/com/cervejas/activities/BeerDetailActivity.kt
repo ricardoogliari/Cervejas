@@ -9,6 +9,7 @@ import rogliari.pessoal.projeto.com.cervejas.R
 import rogliari.pessoal.projeto.com.cervejas.extensions.load
 import rogliari.pessoal.projeto.com.cervejas.extensions.px
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
+import rogliari.pessoal.projeto.com.cervejas.util.Utilitario
 
 class BeerDetailActivity : AppCompatActivity() {
 
@@ -16,12 +17,16 @@ class BeerDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_beer_detail)
 
-        val beer : Beer = intent.getSerializableExtra("beer") as Beer
-        txtDetailName.text = beer.name
-        txtDetailTagline.text = beer.tagline
-        txtDetailDescription.text = beer.description
+        txtDetailName.text = intent.getStringExtra("name")
+        txtDetailTagline.text = intent.getStringExtra("tagline")
+        txtDetailDescription.text = intent.getStringExtra("description")
 
-        actDetailThumb.load(beer.image_url) { request -> request.resize(120.px, 150.px).centerInside() }
+        if (Utilitario.isConnected(this)) {
+            actDetailThumb.load(intent.getStringExtra("image_url")) { request -> request.resize(120.px, 150.px).centerInside() }
+        } else {
+            actDetailThumb.setImageResource(R.drawable.ic_wifi_off)
+        }
+
 
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import io.realm.Realm
 import rogliari.pessoal.projeto.com.cervejas.R
 import java.util.*
 

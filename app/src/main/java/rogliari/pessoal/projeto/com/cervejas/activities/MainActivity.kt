@@ -13,11 +13,15 @@ import android.view.MenuItem
 import android.view.View
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
+import com.vicpin.krealmextensions.save
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import rogliari.pessoal.projeto.com.cervejas.R
@@ -25,13 +29,18 @@ import rogliari.pessoal.projeto.com.cervejas.adapters.BeersAdapter
 import rogliari.pessoal.projeto.com.cervejas.listeners.ClickInBeerListInterface
 import rogliari.pessoal.projeto.com.cervejas.models.Beer
 import rogliari.pessoal.projeto.com.cervejas.retrofit.RetrofitInitializer
+import rogliari.pessoal.projeto.com.cervejas.util.Utilitario
 
 class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClickListener, SwipyRefreshLayout.OnRefreshListener {
 
-    lateinit var beers : List<Beer>
+    var beers : List<Beer> = ArrayList<Beer>()
     lateinit var choresFlowable : Flowable<List<Beer>>
     lateinit var mAdapter : BeersAdapter
     var page : Int = 1;
+    val realm = Realm.getDefaultInstance()
+    val realmResults = realm.where<Beer>().findAll()
+
+    var connected  : Boolean = false
 
     override fun onRefresh(direction: SwipyRefreshLayoutDirection?) {
         page++
@@ -44,31 +53,62 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
 
     override fun click(beer: Beer) {
         val intent = Intent(this, BeerDetailActivity::class.java)
-        intent.putExtra("beer", beer)
+        intent.putExtra("name", beer.name)
+        intent.putExtra("tagline", beer.tagline)
+        intent.putExtra("description", beer.description)
+        intent.putExtra("image_url", beer.image_url)
         startActivity(intent)
     }
 
     private fun getBeers(){
-        choresFlowable = RetrofitInitializer().beerService().list(page) //val makes reference final
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-        choresFlowable.subscribe { response ->
-            if (page == 1) {
-                beers = response.toList()
-                mAdapter = BeersAdapter(beers, this, this)
-                recMainList.adapter = mAdapter
-            } else {
-                beers = beers.plus(response.toList())
-                mAdapter.newSetOfData(beers)
+        if (connected) {
+
+            choresFlowable = RetrofitInitializer().beerService().list(page) //val makes reference final
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+            choresFlowable.subscribe { response ->
+
+                workWithData(response.toList(), false)
             }
-            swipeRefreshLayout.isRefreshing = false
+        } else {
+            workWithData(realmResults, true)
         }
+    }
+
+    fun  workWithData(data: List<Beer>, cache: Boolean){
+        if (page == 1) {
+            beers = if (cache) data.subList(0, 10) else data
+            mAdapter = BeersAdapter(beers, this, this)
+            recMainList.adapter = mAdapter
+
+            if (!cache) {
+                for (beer: Beer in beers) {
+                    realm.beginTransaction()
+                    realm.copyToRealmOrUpdate(beer)
+                    realm.commitTransaction()
+                }
+            }
+        } else {
+            beers = beers.plus(if (cache) data.subList(Math.min((page * 10) - 10, data.size), Math.min(page * 10, data.size)) else data)
+            mAdapter.newSetOfData(beers)
+
+            if (!cache) {
+                for (beer: Beer in data) {
+                    realm.beginTransaction()
+                    realm.copyToRealmOrUpdate(beer)
+                    realm.commitTransaction()
+                }
+            }
+        }
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbarDefault)
+
+        connected = Utilitario.isConnected(this)
 
         recMainList.setHasFixedSize(true)
         recMainList.layoutManager = LinearLayoutManager(this)
