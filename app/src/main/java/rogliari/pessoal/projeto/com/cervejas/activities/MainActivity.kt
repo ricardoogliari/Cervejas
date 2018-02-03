@@ -65,10 +65,7 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
     * */
     override fun click(beer: Beer) {
         val intent = Intent(this, BeerDetailActivity::class.java)
-        intent.putExtra("name", beer.name)
-        intent.putExtra("tagline", beer.tagline)
-        intent.putExtra("description", beer.description)
-        intent.putExtra("image_url", beer.image_url)
+        intent.putExtra("idBeer", beer.id)
         startActivity(intent)
     }
 
@@ -99,25 +96,29 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
             recMainList.adapter = mAdapter
 
             if (!cache) {
-                for (beer: Beer in beers) {
-                    realm.beginTransaction()
-                    realm.copyToRealmOrUpdate(beer)
-                    realm.commitTransaction()
-                }
+                saveBeersInBD(beers)
             }
         } else {
             beers = beers.plus(if (cache) data.subList(Math.min((page * 10) - 10, data.size), Math.min(page * 10, data.size)) else data)
             mAdapter.newSetOfData(beers)
 
             if (!cache) {
-                for (beer: Beer in data) {
-                    realm.beginTransaction()
-                    realm.copyToRealmOrUpdate(beer)
-                    realm.commitTransaction()
-                }
+                saveBeersInBD(data)
             }
         }
         swipeRefreshLayout.isRefreshing = false
+    }
+
+    fun saveBeersInBD(data: List<Beer>){
+        for (beer: Beer in data) {
+            realm.beginTransaction()
+            var tempBeer = realm.where<Beer>().equalTo("id", beer.id.toInt()).findFirst()
+            if (tempBeer != null) {
+                beer.favorite = tempBeer.favorite
+            }
+            realm.copyToRealmOrUpdate(beer)
+            realm.commitTransaction()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
