@@ -32,6 +32,8 @@ import rogliari.pessoal.projeto.com.cervejas.util.Utilitario
 class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClickListener, SwipyRefreshLayout.OnRefreshListener {
 
     var beers : List<Beer> = ArrayList<Beer>()
+    var favorites : List<Beer> = ArrayList<Beer>()
+
     lateinit var choresFlowable : Flowable<List<Beer>>
     lateinit var mAdapter : BeersAdapter
     var page : Int = 1;
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
     val realmResults = realm.where<Beer>().findAll()
 
     var connected  : Boolean = false
+
+    var all : Boolean = true
 
     /*
     * Método da interface ObRefreshListener.
@@ -160,7 +164,7 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
             if (text.length > 0){
                 var tempList = ArrayList<Beer>()
 
-                for (beer: Beer in beers) {
+                for (beer: Beer in (if (all) beers else favorites)) {
                     if (beer.name.contains(text) || beer.tagline.contains(text)) tempList.add(beer)
                 }
 
@@ -193,6 +197,7 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
         toolbarSearch.visibility = View.GONE
         edtSearch.setText("")
         mAdapter.newSetOfData(beers)
+        swipeRefreshLayout.isEnabled = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -204,8 +209,28 @@ class MainActivity : AppCompatActivity(), ClickInBeerListInterface, View.OnClick
     * Quando o action item da lupa for clicado, altera a toolbar para mostra a caixa de pesquisa
     * */
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        toolbarDefault.visibility = View.GONE
-        toolbarSearch.visibility = View.VISIBLE
+        if (item?.itemId == R.id.miFind) {
+            toolbarDefault.visibility = View.GONE
+            toolbarSearch.visibility = View.VISIBLE
+            swipeRefreshLayout.isEnabled = false
+        } else if (item?.itemId == R.id.miAll) {
+            //todos
+            if (!all){
+                //mudar para todos
+                all = true;
+                mAdapter.newSetOfData(beers)
+                swipeRefreshLayout.isEnabled = true
+            }
+        } else {
+            //favoritos
+            if (all){
+                //mudar para favoritos
+                swipeRefreshLayout.isEnabled = false
+                all = false
+                favorites = realm.where<Beer>().equalTo("favorite", true).findAll()
+                mAdapter.newSetOfData(favorites)
+            }
+        }
 
         return true
     }

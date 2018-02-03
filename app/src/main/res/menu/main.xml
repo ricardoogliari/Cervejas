@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/miAll"
+        android:title=""
+        android:icon="@drawable/ic_home"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/miFavorites"
+        android:title=""
+        android:icon="@drawable/ic_home_heart"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/miFind"
         android:title=""
         android:icon="@drawable/ic_magnify"
